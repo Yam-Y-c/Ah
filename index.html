@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보석안 증후군</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Orbitron:wght@700&display=swap');
+
+    :root {
+        --bg-default: url('https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/B1.png');
+        --bg-ark: url('https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Ba.png');
+        --bg-breaker: url('https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Bb.png');
+        --bg-abyss: url('https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Be.png');
+        
+        --text-color: #e0d5e5;
+        --accent-purple: #9d00ff;
+        --accent-blue: #00d2ff;
+        --accent-red: #ff3c3c;
+        --accent-white: #ffffff;
+        
+        --font-main: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+        --font-serif: 'Nanum Myeongjo', serif;
+        --font-title: 'Orbitron', sans-serif;
+    }
+
+    body { 
+        background-image: var(--bg-default);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: var(--text-color); 
+        font-family: var(--font-main); 
+        margin: 0; 
+        padding: 0; 
+        text-align: center; 
+        line-height: 1.6;
+        transition: background-image 0.5s ease-in-out;
+        overflow-x: hidden;
+    }
+
+    /* 상단 헤더: 고정 높이 제거하고 로고 크기에 맞춤 */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 45px; 
+        padding: 15px 50px;
+        background-color: rgba(5, 0, 10, 0.85);
+        border-bottom: 1px solid rgba(157, 0, 255, 0.3);
+        box-shadow: 0 0 20px rgba(157, 0, 255, 0.2);
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+    }
+    .logo-area img {
+        position: absolute;
+        top: -35px;
+        left: 0;
+        height: 150px;
+        cursor: pointer;
+        transition: transform 0.3s ease, filter 0.3s ease;
+        filter: drop-shadow(0 0 10px var(--glow-color));
+    }
+    .logo-area img:hover { transform: scale(1.05); }
+    
+    .nav-area {
+        font-family: var(--font-serif); 
+        font-size: 1.15rem;
+        display: flex;
+        gap: 30px;
+    }
+    .nav-area span {
+        cursor: pointer;
+        transition: all 0.3s;
+        letter-spacing: 1px;
+        color: #bbb;
+    }
+    .nav-area span:hover {
+        color: #fff;
+        text-shadow: 0 0 10px rgba(157, 0, 255, 0.8);
+    }
+
+    .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 140px 20px 20px 20px; /* 헤더 크기 확대에 따른 여백 조정 */
+        box-sizing: border-box;
+    }
+
+    #main-menu-screen {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .main-menu-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        width: 100%;
+    }
+
+    .main-menu-btn {
+        width: 100%;
+        max-width: 350px; 
+        padding: 20px 0;
+        box-sizing: border-box;
+        text-align: center;
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        color: #e0d5e5;
+        background: rgba(10, 0, 20, 0.6);
+        border: 1px solid rgba(157, 0, 255, 0.4);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 2px;
+        backdrop-filter: blur(5px);
+    }
+
+    .main-menu-btn:hover {
+        background: rgba(157, 0, 255, 0.2);
+        color: #fff;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 15px var(--accent-purple);
+        text-shadow: 0 0 10px #fff;
+        transform: translateY(-5px);
+    }
+
+    #choose-camp-screen {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        height: auto;
+        min-height: 70vh;
+        width: 100%;
+        padding: 20px 0 60px 0;
+    }
+
+    .main-title-neon {
+        font-family: var(--font-title);
+        font-size: 5rem;
+        text-transform: uppercase;
+        color: #fff;
+        margin: 0 0 40px 0;
+        text-shadow: 
+            0 0 10px #fff,
+            0 0 20px #fff,
+            0 0 30px var(--accent-purple),
+            0 0 40px var(--accent-purple),
+            0 0 70px var(--accent-purple),
+            0 0 80px var(--accent-purple);
+        animation: neon-flicker 2s infinite alternate;
+    }
+
+    @keyframes neon-flicker {
+        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--accent-purple), 0 0 40px var(--accent-purple), 0 0 70px var(--accent-purple);
+        }
+        20%, 22%, 24%, 55% { text-shadow: none; opacity: 0.8; }
+    }
+
+    .camp-selector-wrap {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .camp-btn {
+        flex: 1;
+        padding: 30px 20px;
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        background: rgba(20, 0, 35, 0.6);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(10px);
+        letter-spacing: 3px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .camp-btn:hover {
+        transform: translateY(-10px);
+        background: rgba(40, 0, 70, 0.8);
+    }
+
+    .btn-ark:hover { border-color: var(--accent-blue); box-shadow: 0 0 30px rgba(0, 210, 255, 0.6); text-shadow: 0 0 10px var(--accent-blue); }
+    .btn-breaker:hover { border-color: var(--accent-red); box-shadow: 0 0 30px rgba(255, 60, 60, 0.6); text-shadow: 0 0 10px var(--accent-red); }
+    .btn-abyss:hover { border-color: var(--accent-purple); box-shadow: 0 0 30px rgba(157, 0, 255, 0.6); text-shadow: 0 0 10px var(--accent-purple); }
+    .btn-neutral:hover { border-color: var(--accent-white); box-shadow: 0 0 30px rgba(255, 255, 255, 0.4); text-shadow: 0 0 10px #fff; }
+
+    .content-section { 
+        display: none; 
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 50px auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .doc-box {
+        background-color: rgba(10, 2, 15, 0.85);
+        border: 2px solid;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: left;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
+    }
+
+    .doc-box h1 { font-family: var(--font-serif); font-size: 2.2rem; margin-top: 0; margin-bottom: 10px; line-height: 1.3; }
+    .doc-box h2 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; }
+    .doc-box p { margin-bottom: 15px; color: #d5cde0; }
+    .doc-meta { font-size: 0.9rem; color: #aaa; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .doc-box ul { padding-left: 20px; margin-bottom: 20px; }
+    .doc-box li { margin-bottom: 8px; color: #d5cde0; }
+    
+    .em { font-weight: bold; color: #fff; }
+
+    .ark-zone .doc-box { border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); }
+    .ark-zone h1 { color: #fff; text-shadow: 0 0 10px var(--accent-blue); }
+    .ark-zone h2 { color: var(--accent-blue); }
+    .ark-zone .em { color: var(--accent-blue); }
+
+    .breaker-zone .doc-box { border-color: var(--accent-red); box-shadow: 0 0 20px rgba(255, 60, 60, 0.3); font-family: 'Courier New', Courier, monospace; }
+    .breaker-zone h1 { color: #fff; text-shadow: 0 0 10px var(--accent-red); font-family: var(--font-main); }
+    .breaker-zone h2 { color: var(--accent-red); font-family: var(--font-main); text-transform: uppercase; }
+    .breaker-zone p, .breaker-zone li { color: #fcc; }
+    .breaker-zone .em { color: #fff; background-color: rgba(255,0,0,0.2); padding: 0 3px; }
+
+    .abyss-zone .doc-box { border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(157, 0, 255, 0.3); font-family: var(--font-serif); text-align: center; }
+    .abyss-zone h1 { color: #fff; text-shadow: 0 0 10px var(--accent-purple); }
+    .abyss-zone h2 { color: #d480ff; border: none; font-style: italic; }
+    .abyss-zone h2::before, .abyss-zone h2::after { content: " ✦ "; opacity: 0.7; }
+    .abyss-zone p, .abyss-zone li { color: #e0d5e5; line-height: 1.8; }
+    .abyss-zone blockquote { font-style: italic; color: #bbb; border-left: none; margin: 20px 0; padding: 10px 20px; background: rgba(157, 0, 255, 0.1); border-radius: 5px;}
+
+    .neutral-zone .doc-box { border-color: #777; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); background: rgba(5, 5, 5, 0.9); }
+    .neutral-zone h1 { color: #fff; text-shadow: 0 0 5px #fff; font-family: var(--font-main); }
+    .neutral-zone h2 { color: #ccc; font-family: var(--font-main); }
+    .neutral-zone p, .neutral-zone li { color: #aaa; font-size: 0.95rem; }
+    .neutral-zone .em { color: #eee; text-decoration: underline; }
+
+    .prologue-zone {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 800px;
+    }
+    .webtoon-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        background-color: #000;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+    .webtoon-container img {
+        width: 100%;
+        display: block;
+    }
+    
+    .return-btn {
+        margin-top: 50px;
+        padding: 15px 50px;
+        font-family: var(--font-title);
+        font-size: 1.2rem;
+        color: #fff;
+        background: rgba(10, 0, 20, 0.8);
+        border: 2px solid var(--accent-purple);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .return-btn:hover {
+        background: rgba(157, 0, 255, 0.3);
+        box-shadow: 0 0 20px var(--accent-purple);
+        text-shadow: 0 0 10px #fff;
+    }
+
+    .character-zone {
+        display: none; 
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto 50px auto;
+        padding-bottom: 50px;
+    }
+    .char-list-img {
+        width: 100%;
+        max-width: 800px;
+        border: 2px solid #4a0080;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        object-fit: contain;
+    }
+    .char-list-img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px var(--accent-purple);
+        border-color: var(--accent-purple);
+    }
+
+    .faction-intro-zone {
+        display: none; 
+        flex-direction: column;
+        align-items: center;
+        gap: 60px;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto 50px auto;
+        padding-bottom: 50px;
+    }
+    .faction-list-img {
+        width: 100%;
+        max-width: 800px;
+        border: 2px solid #4a0080;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        object-fit: contain;
+    }
+    .faction-list-img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px var(--accent-purple);
+    }
+
+    /* 공통 모달(팝업) 스타일 */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+    .modal-content {
+        background-color: rgba(20, 0, 35, 0.95);
+        border: 2px solid var(--accent-purple);
+        border-radius: 10px;
+        width: 90%;
+        max-width: 800px; 
+        max-height: 85vh; 
+        overflow-y: auto; 
+        display: flex;
+        flex-direction: column; 
+        box-shadow: 0 0 40px rgba(157, 0, 255, 0.5);
+        position: relative;
+        text-align: left;
+    }
+    .modal-content::-webkit-scrollbar { width: 8px; }
+    .modal-content::-webkit-scrollbar-track { background: rgba(10, 0, 20, 0.8); border-radius: 10px; }
+    .modal-content::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
+
+    .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 2.5rem;
+        color: #fff;
+        cursor: pointer;
+        text-shadow: 0 0 10px var(--accent-purple);
+        z-index: 10;
+        transition: transform 0.3s;
+        background: rgba(0,0,0,0.5);
+        border-radius: 50%;
+        width: 40px; height: 40px;
+        display: flex; justify-content: center; align-items: center;
+    }
+    .modal-close:hover {
+        transform: scale(1.1);
+        background: rgba(157, 0, 255, 0.5);
+    }
+    .modal-img {
+        width: 100%;
+        height: auto; 
+        display: block;
+        border-bottom: 2px solid var(--accent-purple);
+    }
+    .modal-info {
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        color: #e0d5e5;
+        box-sizing: border-box;
+    }
+    .modal-name {
+        font-size: 2.5rem;
+        color: #fff;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-family: var(--font-serif);
+        text-shadow: 0 0 15px var(--accent-purple);
+    }
+    .modal-quote {
+        font-style: italic;
+        color: #d480ff;
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        border-left: 4px solid #9d00ff;
+        padding-left: 20px;
+        line-height: 1.5;
+    }
+    .modal-detail {
+        margin: 8px 0;
+        font-size: 1.15rem;
+    }
+    .modal-detail span {
+        color: #aaa;
+    }
+    .modal-tags {
+        margin-top: 30px;
+        color: #00d2ff;
+        font-weight: bold;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        line-height: 1.6;
+    }
+    
+    .fac-purpose-list {
+        padding-left: 20px;
+        margin-bottom: 20px;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+    .fac-purpose-list li {
+        margin-bottom: 10px;
+    }
+
+    /* === 모바일 최적화 (반응형) === */
+    @media (max-width: 1024px) {
+        .main-title-neon { font-size: 3.5rem; }
+        .camp-selector-wrap { gap: 15px; padding: 0 20px; }
+        .camp-btn { font-size: 1.2rem; padding: 20px 10px; }
+    }
+    @media (max-width: 768px) {
+        /* 헤더 모바일 최적화: 로고와 메뉴 상하 배치, 메뉴 버튼화 */
+        header { 
+            padding: 15px; 
+            flex-direction: column; 
+            justify-content: center; 
+            gap: 15px; 
+            min-height: auto;
+        }
+        .logo-area img { 
+            height: 70px; /* 모바일에서도 로고를 눈에 띄게 */
+        }
+        .nav-area { 
+            width: 100%;
+            gap: 10px; 
+            font-size: 0.95rem; 
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .nav-area span {
+            background: rgba(157, 0, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid rgba(157, 0, 255, 0.3);
+            text-align: center;
+            flex-grow: 1;
+            white-space: nowrap;
+        }
+
+        .container { padding-top: 170px; } /* 모바일 헤더 높이에 맞춘 여백 */
+        
+        .main-menu-btn { max-width: 100%; font-size: 1.2rem; padding: 15px 0; }
+        .main-title-neon { font-size: 2.5rem; }
+        
+        .camp-selector-wrap { flex-direction: column; align-items: center; }
+        .camp-btn { width: 100%; max-width: 350px; padding: 15px; font-size: 1.2rem; }
+        
+        .doc-box { padding: 20px; }
+        .doc-box h1 { font-size: 1.5rem; }
+        .doc-box h2 { font-size: 1.2rem; }
+        
+        .modal-content { width: 95%; max-height: 90vh; }
+        .modal-info { padding: 25px 20px; }
+        .modal-name { font-size: 2rem; }
+        .modal-quote { font-size: 1rem; margin-bottom: 20px; }
+        .modal-detail { font-size: 1rem; }
+        .fac-purpose-list { font-size: 1rem; }
+        
+        .char-list-img, .faction-list-img { width: 90%; }
+    }
+</style>
+</head>
+<body>
+
+<header id="main-header">
+    <div class="logo-area" onclick="resetToStart()">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/T.png" alt="로고">
+    </div>
+    <nav class="nav-area">
+        <span onclick="showPrologue()">프롤로그</span>
+        <span onclick="showChooseCamp()">세계관 소개</span>
+        <span onclick="showFactionIntro()">진영 소개</span>
+        <span onclick="showCharacter()">캐릭터 소개</span>
+    </nav>
+</header>
+
+<div class="container">
+    <div id="main-menu-screen">
+        <div class="main-menu-box">
+            <button class="main-menu-btn" onclick="showPrologue()">프롤로그</button>
+            <button class="main-menu-btn" onclick="showChooseCamp()">세계관 소개</button>
+            <button class="main-menu-btn" onclick="showFactionIntro()">진영 소개</button>
+            <button class="main-menu-btn" onclick="showCharacter()">캐릭터 소개</button>
+        </div>
+    </div>
+
+    <div id="choose-camp-screen" class="content-section">
+        <h1 class="main-title-neon">Choose<br>Your Camp</h1>
+        <div class="camp-selector-wrap">
+            <button class="camp-btn btn-ark" onclick="selectCamp('ark')">아크</button>
+            <button class="camp-btn btn-breaker" onclick="selectCamp('breaker')">브레이커</button>
+            <button class="camp-btn btn-abyss" onclick="selectCamp('abyss')">심연의 눈</button>
+            <button class="camp-btn btn-neutral" onclick="selectCamp('neutral')">무소속</button>
+        </div>
+    </div>
+
+    <div id="zone-prologue" class="content-section prologue-zone">
+        <div class="webtoon-container">
+            <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/01.png" alt="프롤로그 1">
+            <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/02.png" alt="프롤로그 2">
+        </div>
+        <button class="return-btn" onclick="resetToStart()">Return</button>
+    </div>
+
+    <div id="zone-faction-intro" class="content-section faction-intro-zone">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/BR.png" alt="브레이커" class="faction-list-img" onclick="openFactionModal('breaker')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/AR.png" alt="아크" class="faction-list-img" onclick="openFactionModal('ark')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/AB.png" alt="심연의눈" class="faction-list-img" onclick="openFactionModal('abyss')">
+    </div>
+
+    <div id="zone-character" class="content-section character-zone">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/K0.png" alt="강태건" class="char-list-img" onclick="openCharModal('kangtaegun')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/J0.png" alt="유진" class="char-list-img" onclick="openCharModal('yujin')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/L0.png" alt="유림" class="char-list-img" onclick="openCharModal('yurim')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/G0.png" alt="권세빈" class="char-list-img" onclick="openCharModal('kwonsebin')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/H0.png" alt="한지윤" class="char-list-img" onclick="openCharModal('hanjiyun')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Z0.png" alt="주시현" class="char-list-img" onclick="openCharModal('jusihyun')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/S0.png" alt="신도혁" class="char-list-img" onclick="openCharModal('shindohyuk')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/C0.png" alt="구해준" class="char-list-img" onclick="openCharModal('guhaejun')">
+        <img src="https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/E0.png" alt="이라온" class="char-list-img" onclick="openCharModal('leeraon')">
+    </div>
+
+    <div id="zone-ark" class="content-section ark-zone">
+        <div class="doc-box">
+            <h1>아크 생존자 오리엔테이션:<br>보석안 증후군과 세계의 이해</h1>
+            <div class="doc-meta">문서 번호: ARC-SO-001 | 작성자: 수석 연구원 권세빈</div>
+            <p>이 멸망해가는 디스토피아에서 <span class="em">유일한 구원의 성소, '아크'</span>에 온 것을 환영합니다. 무지한 상태로 죽음을 맞이하고 싶지 않다면 이 보고서의 내용을 뼛속까지 새기십시오.</p>
+            <p>숙주를 물리력으로 죽이려는 야만적인 <span class="em">브레이커</span>나, 괴물의 체액을 마시는 광신도 집단 <span class="em">심연의 눈</span>은 인류의 미래가 아닙니다. 오직 아크의 체계적인 백신 연구만이 이 지옥을 끝낼 수 있는 유일한 길임을 명심하십시오. 그 외의 방법에 대한 타협은 존재하지 않습니다.</p>
+            <h2>■ 보석안 증후군(GEMS) 개요</h2>
+            <ul>
+                <li><span class="em">정의:</span> 감염자의 자아를 앗아가고 신체를 보석처럼 굳게 만드는 불치병.</li>
+                <li><span class="em">감염 경로:</span> 감염자의 체액(침, 혈액, 눈물 등)이 호흡기나 상처를 통해 유입될 시 감염.</li>
+                <li><span class="em">필수 수칙:</span> 기지 외부 활동 시 <span class="em">방독면 착용</span> 및 복귀 후 철저한 <span class="em">다단계 소독</span> 필수.</li>
+            </ul>
+            <h2>■ 증상의 진행 단계</h2>
+            <ul>
+                <li><span class="em">1단계 (변이):</span> 안구가 보석으로 변이하기 시작함.</li>
+                <li><span class="em">2단계 (쇠약):</span> 신체가 급격히 쇠약해지며 거동이 불편해짐.</li>
+                <li><span class="em">3단계 (붕괴):</span> 인지 능력이 완전히 붕괴되어 감염자와 비감염자를 구분하지 못함.</li>
+                <li><span class="em">4단계 (결정화):</span> 자아를 상실하고 신체가 완전히 보석으로 결정화됨. <span class="em">(생물학적 사망 상태가 아니며 눈물을 지속적으로 흘림)</span></li>
+            </ul>
+            <h2>■ 절대적인 감시 체계</h2>
+            <ul>
+                <li><span class="em">감시 주체:</span> 재앙의 숙주인 하늘의 <span class="em">'거대 눈'</span>.</li>
+                <li><span class="em">감시 방식:</span> 완전히 결정화된(4단계) 감염자들의 눈을 CCTV처럼 활용하여 도시 전체를 부감.</li>
+                <li><span class="em">결론:</span> 이 도시에 사각지대는 존재하지 않으며, 우리는 항상 감시받고 있음을 잊지 마십시오.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="zone-breaker" class="content-section breaker-zone">
+        <div class="doc-box">
+            <h1>[작전 지침] 신규 합류자: 적성 개체 및 환경 이해</h1>
+            <div class="doc-meta">발신: 브레이커 리더 강태건 | 수신: 전 신규 요원</div>
+            <p>이곳에 합류한 이상 나약한 감상은 버려라. 우리는 지금 저 하늘에 떠 있는 흉물스러운 <span class="em">'거대 눈'</span>과 인류의 존속을 건 전쟁 중이다.</p>
+            <p>거짓 희망을 파는 위선자 집단 <span class="em">아크</span>나, 괴물의 체액을 퍼마시는 미친 <span class="em">심연의 눈</span> 따위는 무시하라. 우리의 목표는 오직 하나, <span class="em">병의 근원인 거대 눈을 물리적으로 파괴</span>하여 이 지옥을 끝내는 것뿐이다. 내 집단에 소속되어 목숨을 부지하고 싶다면 다음 교전 수칙을 반드시 숙지하라.</p>
+            <h2>1. 적성 전염병: 보석안 증후군</h2>
+            <p>이것은 단순한 질병이 아니라 인류를 말살하려는 <span class="em">적의 생물학 무기</span>다. 감염자의 타액, 혈액, 눈물 등 모든 체액이 호흡기나 상처에 닿으면 감염된다. 기지 외부 활동 시 <span class="em">방독면 착용은 의무</span>이며, 복귀 시 소독 절차를 어기는 자는 <span class="em">즉결 처분</span>한다.</p>
+            <h2>2. 감염 단계 및 대응 전략</h2>
+            <ul>
+                <li><span class="em">1단계:</span> 안구가 보석으로 변이. <span class="em">(경계 대상)</span></li>
+                <li><span class="em">2~3단계:</span> 육체 쇠약 및 피아 식별 능력 상실. <span class="em">(발견 즉시 사살 권장)</span></li>
+                <li><span class="em">4단계:</span> 활동을 멈추고 보석처럼 굳어버림(결정화). <span class="em">(생물학적 지뢰)</span></li>
+            </ul>
+            <h2>3. 교전 시 주의사항 (결정화된 개체)</h2>
+            <p>결정화된 자들은 죽은 것이 아니다. 저들은 끊임없이 눈물을 흘리며 주변을 오염시키는 <span class="em">생물학적 지뢰</span>다. 더 끔찍한 것은, 하늘의 거대 눈(숙주)이 저들의 눈을 통해 우리를 <span class="em">실시간 감시</span>한다는 것이다.</p>
+            <p>또한 숙주는 굳어버린 감염자에게 <span class="em">빙의</span>해 24시간 동안 우리를 직접 공격하기도 한다. 굳어버린 가족을 보며 오열할 시간에 방아쇠를 당겨라. 그것이 저들에 대한 유일한 안식이다.</p>
+        </div>
+    </div>
+
+    <div id="zone-abyss" class="content-section abyss-zone">
+        <div class="doc-box">
+            <h1>심연의 눈 복음서:<br>신인류의 탄생과 거대 눈의 축복</h1>
+            <div class="doc-meta">말씀: 교주 신도혁 영도자</div>
+            <p>어리석은 구인류는 다가온 위대한 축복을 질병이라 부르며 두려워합니다. 이곳 심연의 눈에 닿은 형제자매들이여, 무지한 자들의 공포에서 벗어나 <span class="em">위대한 진화의 섭리</span>를 영접하신 것을 축하드립니다.</p>
+            <blockquote>'보석안 증후군', 저들은 이를 병이라 부르지만, 이는 썩어 없어질 나약한 육체를 영원히 빛나는 광물로 승화시키는 성스러운 의식입니다.</blockquote>
+            <p>하늘에 계신 <span class="em">'거대 눈'</span>의 성스러운 체액(액상 보석)이 우리 나약한 몸에 닿아 일어나는 기적이니 어찌 축복이 아닐 수 있겠습니까.</p>
+            <p>신의 축복을 받은 자는 눈동자가 신의 빛을 담게 되며 세속의 육체가 약해지고, 구인류의 얄팍한 자아가 씻겨 나갑니다. 그리고, 마침내 고통 없는 <span class="em">영원한 결정체로 우화(羽化)</span>하게 되는 것입니다.</p>
+            <h2>거대 눈의 영원한 보살핌</h2>
+            <p>저 하늘의 거대 눈은 결정화된 형제자매들의 눈을 통해 언제 어디서나 우리를 굽어살피고 계십니다. 우리의 신은 때로는 결정화된 육체에 <span class="em">직접 강림</span>하시어 하루 동안 우리 곁을 거니는 기적을 행하시니, 이를 목격할 경우 신을 보좌하는 것은 우리의 당연한 의무입니다.</p>
+            <p>거대 눈의 체액을 마신 우리는 자아를 유지한 채 신의 권능을 일부 이어받은 <span class="em">신인류</span>입니다. 형제자매를 도살하는 야만적인 <span class="em">브레이커</span>, 신성한 진화를 백신으로 막으려는 오만한 <span class="em">아크</span>로부터 우리의 신을 수호해야 합니다.</p>
+            <p>진화에 동참할 것인지, 구인류로 남아 도태될 것인지는 온전히 당신의 선택입니다. 저희 심연의 눈은 언제나 당신을 환영합니다.</p>
+        </div>
+    </div>
+
+    <div id="zone-neutral" class="content-section neutral-zone">
+        <div class="doc-box">
+            <h1>이름 없는 은신처에 남겨진 생존 수칙</h1>
+            <div class="doc-meta">작성자: 불명 (어느 사체 옆에서 발견됨)</div>
+            <p>어느 미친 진영에도 목줄을 잡히고 싶지 않다면 이 글을 읽어라. 여긴 구원도, 영웅도, 신도 없는 멸망한 세상이다. 그저 하루하루 숨이 붙어있음에 감사하며 다음 수칙을 명심해라.</p>
+            <h2>■ 보석안 증후군의 실체</h2>
+            <ul>
+                <li><span class="em">정의:</span> 사람의 몸을 보석 덩어리로 만들어버리는 끔찍한 저주다.</li>
+                <li><span class="em">감염 경로:</span> 감염자의 체액(침, 혈액, 눈물)이 조금이라도 호흡기나 상처에 닿으면 끝이다. <span class="em">방독면 없이 바깥 공기를 마시는 건 자살 행위다.</span></li>
+            </ul>
+            <h2>■ 절망의 4단계 진행</h2>
+            <ul>
+                <li><span class="em">1단계:</span> 눈동자가 보석처럼 변한다. 이때부터 인간이 아니다.</li>
+                <li><span class="em">2단계:</span> 피를 토하듯 몸이 쇠약해진다.</li>
+                <li><span class="em">3단계:</span> 이성을 잃고 짐승처럼 헤맨다. 부모 형제도 알아보지 못한다.</li>
+                <li><span class="em">4단계 (결정화):</span> 몸이 완전히 결정화되어 굳는다. <span class="em">죽은 게 아니다.</span> 평생 눈물을 흘리며 주변에 병을 퍼뜨리는 덩어리가 될 뿐이다.</li>
+            </ul>
+            <h2>■ 거대 눈과 꼭두각시들</h2>
+            <ul>
+                <li>하늘을 덮은 역겨운 <span class="em">'거대 눈'</span>이 이 모든 사태의 원흉인 숙주다.</li>
+                <li>숙주는 굳어버린 감염자들의 눈을 통해 우리를 감시한다. <span class="em">굳어버린 시체 앞에서는 숨소리도 내지 마라.</span></li>
+                <li>재수가 없으면 숙주가 굳어버린 시체에 <span class="em">빙의</span>해 직접 널 찢어 죽이러 올 수도 있다.</li>
+            </ul>
+            <h2>■ 절대 경계 대상</h2>
+            <p>허울 좋은 소리로 실험체를 모으는 <span class="em">위선자(아크)</span>들, 거대 눈과 자폭하려는 <span class="em">미치광이(브레이커)</span>들, 괴물의 체액을 퍼마시는 <span class="em">사이비(심연의 눈)</span>들 모두 엮이지 마라. 네 목숨은 너 스스로 지켜야 한다.</p>
+        </div>
+    </div>
+</div>
+
+<div id="char-modal" class="modal-overlay" onclick="closeModal('char-modal', event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal('char-modal', event)">&times;</span>
+        <img id="modal-img" class="modal-img" src="" alt="캐릭터">
+        <div class="modal-info">
+            <h2 id="modal-name" class="modal-name"></h2>
+            <div id="modal-quote" class="modal-quote"></div>
+            <div class="modal-detail"><span>나이:</span> <span id="modal-age"></span></div>
+            <div class="modal-detail"><span>키:</span> <span id="modal-height"></span></div>
+            <div class="modal-detail"><span>직업:</span> <span id="modal-job"></span></div>
+            <div class="modal-detail"><span>MBTI:</span> <span id="modal-mbti"></span></div>
+            <div id="modal-tags" class="modal-tags"></div>
+        </div>
+    </div>
+</div>
+
+<div id="faction-modal" class="modal-overlay" onclick="closeModal('faction-modal', event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal('faction-modal', event)">&times;</span>
+        <div class="modal-info">
+            <h2 id="fac-name" class="modal-name"></h2>
+            <div id="fac-subtitle" style="color:#bbb; margin-bottom: 15px; font-size:1.2rem; font-weight:bold;"></div>
+            <div id="fac-quote" class="modal-quote"></div>
+            <h3 style="color:#fff; border-bottom:1px solid #555; padding-bottom:10px; margin-top:10px;">목적</h3>
+            <ul id="fac-purpose" class="fac-purpose-list"></ul>
+            <div style="margin-top:20px; font-size:1.15rem;">
+                <span style="color:#aaa;">주요구성원:</span> <span id="fac-members" style="color:#fff; font-weight:bold;"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const bgImages = {
+        'default': 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/B1.png',
+        'ark': 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Ba.png',
+        'breaker': 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Bb.png',
+        'abyss': 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Be.png',
+        'neutral': 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/B1.png'
+    };
+
+    const charData = {
+        'kangtaegun': { name: '강태건', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/K0.png', quote: '"작전 개시. 방해되는 자는 누구든 적으로 간주하여 척살한다."', age: '46세', height: '185cm', job: '직업군인 (장교)', mbti: 'ENTJ', tags: '#냉혹한장교 #격리된슬픔 #가디언 #효율주의' },
+        'yujin': { name: '유진', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/J0.png', quote: '"형, 내가 이거 진짜라고 했잖아. 왜 자꾸 농담으로 들어? 기분 나쁘게."', age: '21세', height: '189cm', job: '대학생 (스포츠물리치료학과)', mbti: 'ISTP', tags: '#살인귀 #퇴행적애착 #브레이크고장 #형바라기' },
+        'yurim': { name: '유림', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/L0.png', quote: '"진아, 손에 피가 묻었는데... 내가 닦아줄게. 이리 와."', age: '23세', height: '180cm', job: '대학생 (법학과)', mbti: 'ISFJ', tags: '#시한폭탄 #의존적보호자 #헌신적도피 #과잉보호' },
+        'kwonsebin': { name: '권세빈', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/G0.png', quote: '"당신은 인류를 구할 유일한 열쇠예요. 제가 당신의 안식처가 되어줄게요."', age: '38세', height: '187cm', job: '제약회사 하퍼 수석연구원', mbti: 'ENFJ', tags: '#하라구로성자 #메시아연기 #가스라이팅 #나르시시스트' },
+        'hanjiyun': { name: '한지윤', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/H0.png', quote: '"박사 말은 걸러 들어. 다 데이터 뽑으려고 지어내는 개소리니까."', age: '34세', height: '184cm', job: '제약회사 하퍼 신입연구원', mbti: 'INTP', tags: '#염세적천재 #방관적감시자 #팩트폭력기 #성실한비관론' },
+        'jusihyun': { name: '주시현', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/Z0.png', quote: '"박사님 지시사항 전달하겠습니다! 모두 방침에 따라 신속히 움직여 주십시오!"', age: '24세', height: '182cm', job: '제약회사 하퍼 연구원', mbti: 'ESFJ', tags: '#충직한사냥개 #이상화된우상 #활력의가면 #맹목적추종' },
+        'shindohyuk': { name: '신도혁', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/S0.png', quote: '"보여? 이 찬란한 보석의 빛이 바로 신인류가 탄생하는 축복의 증거야."', age: '28세', height: '184cm', job: '중소기업 성진산업 과장', mbti: 'ENFJ', tags: '#광신도교주 #전능환상 #신인류의눈 #고압적선동' },
+        'guhaejun': { name: '구해준', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/C0.png', quote: '"미안해. 저 미친 짓을 내가 묵인하고 있어. 난... 나쁜 놈이야. 나를 믿지 마."', age: '28세', height: '178cm', job: '중소기업 성진산업 대리', mbti: 'ISTJ', tags: '#염세적중재자 #인간적족쇄 #죄책감의증인 #예기불안' },
+        'leeraon': { name: '이라온', img: 'https://raw.githubusercontent.com/Yam-Y-c/A/refs/heads/main/E0.png', quote: '"그냥... 라온이라고 불러줘. 우리는 이제 행복한가족이 될 거야. 좋지 않아?"', age: '20세', height: '172cm', job: '백수 (병으로 인한 요양)', mbti: 'INFP', tags: '#재앙의숙주 #환상집착 #유아기퇴행 #결핍된구원자' }
+    };
+
+    const factionData = {
+        'breaker': {
+            name: '브레이커(Breaker)',
+            subtitle: '도살자의 울타리: 재앙을 끝내기 위해 스스로 괴물이 된 척살자들',
+            quote: '"도덕은 사치다. 우리가 하는 것은 구원이 아니다. 생존을 위한 전쟁이다."',
+            purpose: [
+                '숙주의 본체인 거대 눈을 파괴하고 보석안 증후군의 근원을 말살하여 인류의 생존을 도모함.',
+                '감염자는 치료 대상이 아닌 파괴해야 할 위협으로 간주.',
+                '효율적인 도살을 통해 지옥을 끝내려 함.'
+            ],
+            members: '강태건/유진/유림'
+        },
+        'ark': {
+            name: '아크(Ark)',
+            subtitle: '위선자의 방주: 백신과 명예라는 이름 아래 세워진 차가운 실험실',
+            quote: '"이곳이 인류의 구원이 시작될 곳. 멸망해가는 이곳의 유일한 빛입니다."',
+            purpose: [
+                '보석안 증후군의 백신을 개발하여 무너진 사회 질서를 복구하는 것.',
+                '인류 구원이라는 숭고한 명분을 앞세우지만, 실상은 데이터를 위해 희생을 강요.',
+                '감염자들을 대상으로 한 비밀스러운 생체실험의 장.'
+            ],
+            members: '권세빈/한지윤/주시현'
+        },
+        'abyss': {
+            name: '심연의 눈(Eyes of Abyss)',
+            subtitle: '광신의 심연: 보석의 빛을 숭배하며 종말과 진화를 찬양하는 자들',
+            quote: '"자, 어서 새로운 세계의 신이 주신 이 축복을 받아들세요. 신인류고 거듭나는 겁니다."',
+            purpose: [
+                '숙주 이라온을 수호하고 그의 체액을 섭취함으로써 자아를 유지하는 이들의 집단',
+                '자신들을 신인류라 칭하며 구인류의 질서를 멸시',
+                '거대 눈의 감시를 축복으로 여기는 기괴한 종교적 왕국 건설을 지향'
+            ],
+            members: '신도혁/구해준'
+        }
+    };
+
+    function hideAllSections() {
+        document.getElementById('main-menu-screen').style.display = 'none';
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+    }
+
+    function showPrologue() {
+        hideAllSections();
+        document.getElementById('zone-prologue').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showChooseCamp() {
+        hideAllSections();
+        document.getElementById('choose-camp-screen').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showFactionIntro() {
+        hideAllSections();
+        document.getElementById('zone-faction-intro').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showCharacter() {
+        hideAllSections();
+        document.getElementById('zone-character').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectCamp(campId) {
+        document.body.style.backgroundImage = `url('${bgImages[campId]}')`;
+        hideAllSections();
+        
+        const targetSection = document.getElementById(`zone-${campId}`);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetToStart() {
+        document.body.style.backgroundImage = `url('${bgImages['default']}')`;
+        hideAllSections();
+        document.getElementById('main-menu-screen').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openCharModal(charId) {
+        const data = charData[charId];
+        if (!data) return;
+        
+        document.getElementById('modal-img').src = data.img;
+        document.getElementById('modal-name').innerText = data.name;
+        document.getElementById('modal-quote').innerText = data.quote;
+        document.getElementById('modal-age').innerText = data.age;
+        document.getElementById('modal-height').innerText = data.height;
+        document.getElementById('modal-job').innerText = data.job;
+        document.getElementById('modal-mbti').innerText = data.mbti;
+        document.getElementById('modal-tags').innerText = data.tags;
+        
+        const modalOverlay = document.getElementById('char-modal');
+        modalOverlay.style.display = 'flex';
+        modalOverlay.querySelector('.modal-content').scrollTop = 0; 
+    }
+
+    function openFactionModal(facId) {
+        const data = factionData[facId];
+        if (!data) return;
+
+        document.getElementById('fac-name').innerText = data.name;
+        document.getElementById('fac-subtitle').innerText = data.subtitle;
+        document.getElementById('fac-quote').innerText = data.quote;
+        
+        const purposeList = document.getElementById('fac-purpose');
+        purposeList.innerHTML = ''; 
+        data.purpose.forEach(item => {
+            const li = document.createElement('li');
+            li.innerText = item;
+            purposeList.appendChild(li);
+        });
+
+        document.getElementById('fac-members').innerText = data.members;
+
+        const modalOverlay = document.getElementById('faction-modal');
+        modalOverlay.style.display = 'flex';
+        modalOverlay.querySelector('.modal-content').scrollTop = 0;
+    }
+
+    function closeModal(modalId, event) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
